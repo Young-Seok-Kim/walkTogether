@@ -10,8 +10,6 @@ if (keystorePropertiesFile.exists()) {
 val envFile = file("${rootProject.projectDir.parent}/.env")
 var googleMapsApiKey = ""
 
-println("📍 [수정된 경로 확인] : ${envFile.absolutePath}")
-
 if (envFile.exists()) {
     val content = envFile.readText()
     content.split("\n", "\r").forEach { line ->
@@ -68,9 +66,6 @@ android {
         multiDexEnabled = true
 
         manifestPlaceholders["GOOGLE_MAPS_API_KEY"] = googleMapsApiKey
-
-        // 이게 드디어 찍히는지 확인!
-        println("🎯 [운명의 확인] 추출된 키: [$googleMapsApiKey]")
 
         minSdk = flutter.minSdkVersion   // Android 6.0 이상 (백그라운드 서비스 안정화 버전)
         targetSdk = 35
