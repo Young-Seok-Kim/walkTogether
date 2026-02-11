@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -76,7 +77,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           // 상태 리셋 후 수동으로 뒤로가기 수행
           ref.read(mapProvider.notifier).cancelAndReset();
           if (context.mounted) {
-            Navigator.of(context).pop();
+            SystemNavigator.pop();
           }
         }
       },
@@ -147,7 +148,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                            fgitontWeight: FontWeight.bold,
                           ),
                         ),
                       );
