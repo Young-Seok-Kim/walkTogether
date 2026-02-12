@@ -148,7 +148,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 24,
-                            fgitontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       );
