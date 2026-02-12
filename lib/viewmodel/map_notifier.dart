@@ -28,7 +28,7 @@ final isTrackingProvider = NotifierProvider<IsTrackingNotifier, bool>(
 );
 
 final mapProvider = NotifierProvider<MapNotifier, List<LatLng>>(
-      () => MapNotifier(),
+  () => MapNotifier(),
 );
 
 final toiletMarkersProvider = StateProvider<Set<Marker>>((ref) => {});
@@ -41,6 +41,7 @@ class MapNotifier extends Notifier<List<LatLng>> {
   BitmapDescriptor toiletIcon = BitmapDescriptor.defaultMarker;
 
   Set<Marker> _toiletMarkers = {};
+
   Set<Marker> get toiletMarkers => _toiletMarkers;
 
   @override
@@ -93,13 +94,13 @@ class MapNotifier extends Notifier<List<LatLng>> {
     final String apiKey = EnvConfig.googleMapsApiKey;
     final String sha1 = EnvConfig.currentSha1;
 
-
     if (apiKey.isEmpty) {
       print("❌ API 키가 비어있습니다.");
       return;
     }
 
-    final url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
+    final url =
+        "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
         "?location=$lat,$lng"
         "&radius=2000" // 1km는 너무 좁을 수 있으니 2km로 추천!
         "&type=toilet"
@@ -115,7 +116,6 @@ class MapNotifier extends Notifier<List<LatLng>> {
           "X-Android-Cert": sha1,
         },
       );
-
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -169,14 +169,12 @@ class MapNotifier extends Notifier<List<LatLng>> {
     return LatLng(lat, lng);
   }
 
-
   void toggleTracking(BuildContext context) async {
     final isTracking = ref.read(isTrackingProvider);
 
     if (isTracking) {
       stopTrackingAndPrepareSave();
     } else {
-
       ref.read(walkNotifierProvider.notifier).startWalk();
       ref.read(isTrackingProvider.notifier).toggle(true);
 
@@ -239,6 +237,7 @@ class MapNotifier extends Notifier<List<LatLng>> {
     final now = DateTime.now();
     return "${now.month}월 ${now.day}일 산책";
   }
+
   // 1. 기록 삭제하고 초기화하기
   void cancelAndReset() {
     // [즉시 실행] 통신과 추적 상태만 바로 끊습니다.
@@ -261,7 +260,7 @@ class MapNotifier extends Notifier<List<LatLng>> {
     });
   }
 
-// 2. 다시 산책 계속하기 (실수로 종료 눌렀을 때)
+  // 2. 다시 산책 계속하기 (실수로 종료 눌렀을 때)
   void resumeTracking() {
     // 1. 이미 스트림이 돌고 있다면 중복 실행 방지
     if (_positionStream != null) return;
@@ -279,7 +278,9 @@ class MapNotifier extends Notifier<List<LatLng>> {
 
   Future<void> completeAndSave(String title) async {
     final List<LatLng> pathForSaving = List.from(state);
-    final DateTime? startTimeForSaving = ref.read(walkNotifierProvider).startTime;
+    final DateTime? startTimeForSaving = ref
+        .read(walkNotifierProvider)
+        .startTime;
 
     await _positionStream?.cancel();
     _positionStream = null;
@@ -291,12 +292,9 @@ class MapNotifier extends Notifier<List<LatLng>> {
     _resetTrackingState();
     await Future.delayed(const Duration(milliseconds: 100));
 
-    ref.read(walkNotifierProvider.notifier).processWalkSaving(
-        title,
-        path: rawPath,
-        startTime: startTimeForSaving
-    );
-
+    ref
+        .read(walkNotifierProvider.notifier)
+        .processWalkSaving(title, path: rawPath, startTime: startTimeForSaving);
   }
 
   // 공통 초기화 로직
@@ -306,6 +304,7 @@ class MapNotifier extends Notifier<List<LatLng>> {
     state = [];
     ref.read(isTrackingProvider.notifier).toggle(false);
   }
+
   Future<String> getPlaceNameAsync(LatLng? firstPoint) async {
     if (firstPoint == null) return "";
 
@@ -325,7 +324,8 @@ class MapNotifier extends Notifier<List<LatLng>> {
         final p = placemarks.first;
         // thoroughfare: 동 이름 (예: 역삼동)
         // subLocality: 구/동 이름
-        final dong = p.thoroughfare ?? p.subLocality ?? p.name ?? p.locality ?? "";
+        final dong =
+            p.thoroughfare ?? p.subLocality ?? p.name ?? p.locality ?? "";
         print("DEBUG: 찾은 주소 -> $dong");
         return dong;
       }
@@ -339,57 +339,64 @@ class MapNotifier extends Notifier<List<LatLng>> {
     // 이미 실행 중이면 중복 실행 방지
     if (_positionStream != null) return;
 
-    _positionStream = Geolocator.getPositionStream(
-      locationSettings: AndroidSettings(
-        accuracy: LocationAccuracy.high,
-        distanceFilter: 3,
-        foregroundNotificationConfig: const ForegroundNotificationConfig(
-          notificationText: "산책 경로를 실시간으로 기록하고 있습니다.",
-          notificationTitle: "산책 중",
-          enableWakeLock: true,
-          setOngoing: true,
-        ),
-      ),
-    ).listen((Position position) {
-      // 🎯 여기에 사용자님이 고생해서 만든 '철벽 필터 로직'을 딱 한 번만 씁니다.
-      if (position.accuracy > 25) return;
+    _positionStream =
+        Geolocator.getPositionStream(
+          locationSettings: AndroidSettings(
+            accuracy: LocationAccuracy.high,
+            distanceFilter: 3,
+            foregroundNotificationConfig: const ForegroundNotificationConfig(
+              notificationText: "산책 경로를 실시간으로 기록하고 있습니다.",
+              notificationTitle: "산책 중",
+              enableWakeLock: true,
+              setOngoing: true,
+            ),
+          ),
+        ).listen((Position position) {
+          // 🎯 여기에 사용자님이 고생해서 만든 '철벽 필터 로직'을 딱 한 번만 씁니다.
+          if (position.accuracy > 25) return;
 
-      final targetSpeed = ref.read(settingsProvider);
-      final currentSpeedKm = position.speed * 3.6;
-      final optimizedPoint = _optimizeLatLng(LatLng(position.latitude, position.longitude));
-      final now = DateTime.now();
+          final targetSpeed = ref.read(settingsProvider);
+          final currentSpeedKm = position.speed * 3.6;
+          final optimizedPoint = _optimizeLatLng(
+            LatLng(position.latitude, position.longitude),
+          );
+          final now = DateTime.now();
 
-      debugPrint("🚀 [실시간 위치] 속도: ${currentSpeedKm.toStringAsFixed(2)} km/h (기준: $targetSpeed)");
+          debugPrint(
+            "🚀 [실시간 위치] 속도: ${currentSpeedKm.toStringAsFixed(2)} km/h (기준: $targetSpeed)",
+          );
 
-      // 1. 데이터 저장 (isWalkStep 판단 포함 - 아까 논의한 대로!)
-      bool isValid = currentSpeedKm <= targetSpeed;
-      // (여기서 distance 비교 로직도 포함하면 완벽!)
+          // 1. 데이터 저장 (isWalkStep 판단 포함 - 아까 논의한 대로!)
+          bool isValid = currentSpeedKm <= targetSpeed;
+          // (여기서 distance 비교 로직도 포함하면 완벽!)
 
-      final PathPoint newPathPoint = PathPoint(
-        latLng: optimizedPoint,
-        timestamp: now,
-        speed: currentSpeedKm,
-        isWalkStep: isValid, // 모델 수정했다면 이거 추가!
-      );
-      ref.read(walkNotifierProvider.notifier).addLocation(newPathPoint);
+          final PathPoint newPathPoint = PathPoint(
+            latLng: optimizedPoint,
+            timestamp: now,
+            speed: currentSpeedKm,
+            isWalkStep: isValid, // 모델 수정했다면 이거 추가!
+          );
+          ref.read(walkNotifierProvider.notifier).addLocation(newPathPoint);
 
-      // 2. 실시간 거리 누적 (정상 속도일 때만)
-      if (state.isNotEmpty) {
-        final lastPoint = state.last;
-        double distance = Geolocator.distanceBetween(
-          lastPoint.latitude, lastPoint.longitude,
-          optimizedPoint.latitude, optimizedPoint.longitude,
-        );
+          // 2. 실시간 거리 누적 (정상 속도일 때만)
+          if (state.isNotEmpty) {
+            final lastPoint = state.last;
+            double distance = Geolocator.distanceBetween(
+              lastPoint.latitude,
+              lastPoint.longitude,
+              optimizedPoint.latitude,
+              optimizedPoint.longitude,
+            );
 
-        if ( isValid && distance < 50.0) {
-          ref.read(walkNotifierProvider.notifier).updateDistance(distance);
-        }
-      }
+            if (isValid && distance < 50.0) {
+              ref.read(walkNotifierProvider.notifier).updateDistance(distance);
+            }
+          }
 
-      // 3. 지도 상태 업데이트
-      _lastUpdateTime = now;
-      state = [...state, optimizedPoint];
-    });
+          // 3. 지도 상태 업데이트
+          _lastUpdateTime = now;
+          state = [...state, optimizedPoint];
+        });
   }
 
   Future<void> loadCustomMarker() async {
