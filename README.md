@@ -1,4 +1,4 @@
-# 📍 walkTogether (산책메이트)
+# 📍 함께, 이길
 > **Google Maps API와 카카오 로그인을 활용한 스마트 산책 경로 관리 앱**
 
 [![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
