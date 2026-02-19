@@ -43,18 +43,19 @@ class LoginScreen extends ConsumerWidget {
   }
 
   Widget _buildBody(BuildContext context, WidgetRef ref) {
+    final isGuestEnabled = ref.watch(guestLoginEnabledProvider);
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // const Icon(Icons.directions_walk, size: 100, color: Colors.blueAccent),
           ClipRRect(
-            borderRadius: BorderRadius.circular(20), // 숫자가 클수록 더 둥글어집니다
+            borderRadius: BorderRadius.circular(20),
             child: Image.asset(
-              'assets/icon/ic_walk_together.png',
+              'assets/icon/ic_way_together.png',
               width: 100,
               height: 100,
-              fit: BoxFit.cover, // 이미지가 영역을 꽉 채우도록 설정했습니다
+              fit: BoxFit.cover,
             ),
           ),
           const SizedBox(height: 20),
@@ -63,6 +64,8 @@ class LoginScreen extends ConsumerWidget {
             style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 50),
+
+          // 1. 카카오 로그인 버튼
           GestureDetector(
             onTap: () => ref.read(authProvider.notifier).loginWithKakao(),
             child: Container(
@@ -89,6 +92,23 @@ class LoginScreen extends ConsumerWidget {
               ),
             ),
           ),
+
+          // 2. 간격과 게스트 버튼 (Column의 자식으로 독립 배치)
+          if (isGuestEnabled) ...[
+            const SizedBox(height: 24),
+            TextButton(
+              onPressed: () {
+                ref.read(authProvider.notifier).loginAsGuest();
+              },
+              child: const Text(
+                "Guest Login for Review",
+                style: TextStyle(
+                  color: Colors.grey,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );

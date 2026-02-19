@@ -8,8 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:walk_together/model/path_point.dart';
-import 'package:walk_together/viewmodel/settings_notifier.dart';
+import 'package:way_together/model/path_point.dart';
+import 'package:way_together/viewmodel/settings_notifier.dart';
 
 import '../model/walk_record_model.dart';
 import '../model/walk_state.dart';

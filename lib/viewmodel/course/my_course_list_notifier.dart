@@ -39,13 +39,18 @@ class MyCourseListNotifier extends AsyncNotifier<List<WalkRecord>> {
     return _fetchInitialData();
   }
 
+  // my_course_list_notifier.dart 내부 수정
   Future<List<WalkRecord>> _fetchInitialData() async {
     try {
-      var kakakoUser = ref.watch(kakaoUserProvider);
+      final kakaoUser = ref.read(kakaoUserProvider);
+      final fbUser = ref.read(authProvider).value;
 
-      final records = await ref.read(walkRepositoryProvider).fetchMyWalks(
-        kakakoUser?.id ?? null
-      );
+      // 카카오 ID가 있으면 카카오 ID를, 없으면 파이어베이스 UID를 사용
+      final String? searchId = kakaoUser?.id ?? fbUser?.uid;
+
+      if (searchId == null) return [];
+
+      final records = await ref.read(walkRepositoryProvider).fetchMyWalks(searchId);
       return records;
     } catch (e) {
       rethrow;

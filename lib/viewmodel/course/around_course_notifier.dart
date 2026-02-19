@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:walk_together/viewmodel/auth_notifier.dart';
+import 'package:way_together/viewmodel/auth_notifier.dart';
 
 import '../../model/walk_record_model.dart';
 import '../../repository/walk_repository.dart';

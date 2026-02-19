@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:walk_together/viewmodel/auth_notifier.dart';
+import 'package:way_together/viewmodel/auth_notifier.dart';
 import '../model/walk_record_model.dart';
 
 final walkRepositoryProvider = Provider((ref) => WalkRepository());
@@ -72,15 +72,28 @@ class WalkRepository {
     return filteredList;
   }
 
-  Future<List<WalkRecord>> fetchMyWalks(String? kakakoUserId) async {
-    final snapshot = await _firestore
+  // walk_repository.dart 수정
+  Future<List<WalkRecord>> fetchMyWalks(String? userId) async {
+    if (userId == null) return [];
+
+    // 우선 kakaoUserId로 조회 시도
+    var snapshot = await _firestore
         .collection('walks')
-        .where('kakaoUserId', isEqualTo: kakakoUserId)
+        .where('kakaoUserId', isEqualTo: userId)
         .orderBy('startTime', descending: true)
         .get();
 
+    // 만약 결과가 없다면 firebaseUserId로도 한 번 더 확인 (게스트 대비)
+    if (snapshot.docs.isEmpty) {
+      snapshot = await _firestore
+          .collection('walks')
+          .where('firebaseUserId', isEqualTo: userId)
+          .orderBy('startTime', descending: true)
+          .get();
+    }
+
     return snapshot.docs
-        .map((doc) => WalkRecord.fromFirestore(doc.data(), doc.id, currentUserId: kakakoUserId))
+        .map((doc) => WalkRecord.fromFirestore(doc.data(), doc.id, currentUserId: userId))
         .toList();
   }
 

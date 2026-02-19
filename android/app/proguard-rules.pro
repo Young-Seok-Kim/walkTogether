@@ -1,0 +1,4 @@
+-keep class com.kakao.sdk.** { *; }
+-keep class com.kakao.sdk.common.** { *; }
+-keep class com.kakao.sdk.user.** { *; }
+-keep class com.kakao.sdk.auth.** { *; }

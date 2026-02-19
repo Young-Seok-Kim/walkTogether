@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:label="함께이길"
+        android:label="함께, 이길"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"
@@ -62,7 +62,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="kakao60a55b2ed9f9667b4f630ff9ceb32332" android:host="oauth" />
+                <data android:scheme="kakao1edcfbcc6a942d0656a73b1813e79dd5" android:host="oauth" />
             </intent-filter>
         </activity>
         <service

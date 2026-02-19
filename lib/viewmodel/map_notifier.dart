@@ -7,8 +7,8 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:walk_together/viewmodel/settings_notifier.dart';
-import 'package:walk_together/viewmodel/walk_notifier.dart';
+import 'package:way_together/viewmodel/settings_notifier.dart';
+import 'package:way_together/viewmodel/walk_notifier.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../core/config/env_config.dart';
@@ -112,7 +112,7 @@ class MapNotifier extends Notifier<List<LatLng>> {
         Uri.parse(url),
         // 🎯 [핵심] 안드로이드 키 제한을 통과하기 위한 명함 제출
         headers: {
-          "X-Android-Package": "com.youngs.walk_together",
+          "X-Android-Package": "com.youngs.way_together",
           "X-Android-Cert": sha1,
         },
       );

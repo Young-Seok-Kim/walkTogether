@@ -66,7 +66,7 @@ class PermissionNotifier extends StateNotifier<Map<Permission, PermissionStatus>
         const intentPermission = AndroidIntent(
           action: 'android.intent.action.MANAGE_APP_PERMISSIONS',
           arguments: {
-            'android.intent.extra.PACKAGE_NAME': 'com.youngs.walk_together', // 본인 패키지명
+            'android.intent.extra.PACKAGE_NAME': 'com.youngs.way_together', // 본인 패키지명
           },
         );
 
@@ -88,7 +88,7 @@ class PermissionNotifier extends StateNotifier<Map<Permission, PermissionStatus>
         // 가장 확실하게 해당 앱의 권한 설정 페이지로 보내는 인텐트
         final intent = AndroidIntent(
           action: 'android.settings.APPLICATION_DETAILS_SETTINGS',
-          data: 'package:com.youngs.walk_together',
+          data: 'package:com.youngs.way_together',
         );
         await intent.launch();
       } catch (e) {

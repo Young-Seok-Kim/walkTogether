@@ -1,5 +1,5 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:walk_together/model/path_point.dart';
+import 'package:way_together/model/path_point.dart';
 
 class WalkState {
   final List<PathPoint> path;

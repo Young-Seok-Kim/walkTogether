@@ -1,4 +1,4 @@
-name: walk_together
+name: way_together
 
 
 description: "walking route recommend application"
@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.1+4
+version: 1.0.0+1
 
 environment:
   sdk: ^3.10.4
@@ -36,7 +36,7 @@ dependencies:
   geolocator: ^14.0.2          # 내 위치 가져오기
   flutter_riverpod: ^3.0.3
   flutter_dotenv: ^5.1.0
-
+  change_app_package_name: ^1.1.0
   firebase_core: ^3.0.0
   cloud_firestore: ^5.6.12
   firebase_auth: ^5.0.0
@@ -87,9 +87,9 @@ flutter:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/icon/ic_walk_together.png" # 아이콘 파일이 이 경로에 있어야 합니다!
+  image_path: "assets/icon/ic_way_together.png" # 아이콘 파일이 이 경로에 있어야 합니다!
   adaptive_icon_background: "#FFFFFF"     # 배경색 (흰색)
-  adaptive_icon_foreground: "assets/icon/ic_walk_together.png" # 로고
+  adaptive_icon_foreground: "assets/icon/ic_way_together.png" # 로고
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

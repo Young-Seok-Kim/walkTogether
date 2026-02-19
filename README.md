@@ -1,4 +1,4 @@
-# walk_together
+# way_together
 
 walking route recommend application
 

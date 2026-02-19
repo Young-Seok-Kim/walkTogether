@@ -115,10 +115,45 @@ class MainScreen extends ConsumerWidget {
                   ref.read(authProvider.notifier).logout();
                 },
               ),
+              ListTile(
+                leading: const Icon(Icons.person_remove_outlined, color: Colors.redAccent),
+                title: const Text(
+                  '회원 탈퇴',
+                  style: TextStyle(color: Colors.redAccent),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showDeleteConfirmDialog(context, ref);
+                },
+              ),
             ],
           ),
         );
       },
+    );
+  }
+
+  void _showDeleteConfirmDialog(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('회원 탈퇴'),
+        content: const Text('정말로 탈퇴하시겠습니까? 저장된 모든 산책 기록이 삭제되며 복구할 수 없습니다.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('취소'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              // TODO: AuthNotifier에 만들 탈퇴 로직 호출
+              ref.read(authProvider.notifier).deleteAccount();
+            },
+            child: const Text('탈퇴하기', style: TextStyle(color: Colors.redAccent)),
+          ),
+        ],
+      ),
     );
   }
 }
