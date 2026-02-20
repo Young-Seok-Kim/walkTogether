@@ -14,7 +14,6 @@ void main() async {
 
   // 1. 환경 변수 로드 (.env 파일을 가장 먼저 읽어야 함)
   await dotenv.load(fileName: ".env");
-  print("🔥 확인된 프로젝트 ID: ${dotenv.env['FIREBASE_PROJECT_ID']}");
   // 2. Firebase 초기화 (env에서 값을 가져옴)
   // const FirebaseOptions는 런타임 변수를 쓸 수 없으므로 const를 제거합니다.
   await Firebase.initializeApp(

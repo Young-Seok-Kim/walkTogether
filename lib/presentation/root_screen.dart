@@ -143,11 +143,15 @@ class _RootScreenState extends ConsumerState<RootScreen> with WidgetsBindingObse
   Future<void> _checkPermissions() async {
     final notifier = ref.read(permissionProvider.notifier);
 
-    await Permission.notification.request();
-
     // 1. 현재 권한 상태 가져오기
     await notifier.checkInitialStatus();
     final status = ref.read(permissionProvider);
+
+    final notificationStatus = await Permission.notification.status;
+    if (notificationStatus.isDenied) {
+      // 최초 1회 혹은 거절 상태일 때만 요청 (영구 거절이면 안 뜸)
+      await Permission.notification.request();
+    }
 
     // 2. 위치 권한이 이미 있다면 즉시 화면 넘기기
     if (status[Permission.locationAlways] == PermissionStatus.granted ||
