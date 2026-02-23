@@ -103,17 +103,18 @@ class MapNotifier extends Notifier<List<LatLng>> {
         "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
         "?location=$lat,$lng"
         "&radius=2000" // 1km는 너무 좁을 수 있으니 2km로 추천!
-        "&type=toilet"
+        "&keyword=화장실"
         "&key=$apiKey"
         "&language=ko";
 
     try {
       final response = await http.get(
         Uri.parse(url),
-        // 🎯 [핵심] 안드로이드 키 제한을 통과하기 위한 명함 제출
         headers: {
           "X-Android-Package": "com.youngs.way_together",
-          "X-Android-Cert": sha1,
+          "X-Android-Cert": sha1.trim(),
+          // 🎯 추가: 구글 서버가 요구하는 Referer 형식을 강제로 넣어봅니다.
+          "Referer": "http://com.youngs.way_together",
         },
       );
 
