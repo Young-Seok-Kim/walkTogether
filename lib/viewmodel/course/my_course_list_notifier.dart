@@ -36,7 +36,28 @@ class MyCourseListNotifier extends AsyncNotifier<List<WalkRecord>> {
 
   @override
   FutureOr<List<WalkRecord>> build() async {
-    return _fetchInitialData();
+    // 🎯 1. 유저 정보를 'watch' 합니다.
+    // 잠금화면에서 돌아와 유저 정보가 복구되면 build가 자동으로 다시 실행돼요!
+    final kakaoUser = ref.watch(kakaoUserProvider);
+    final fbUser = ref.watch(authProvider).value;
+
+    // 🎯 2. ID 결정 (문자열 변환 필수! ㅋ)
+    String? searchId;
+    if (kakaoUser != null) {
+      searchId = kakaoUser.id.toString();
+    } else if (fbUser != null) {
+      searchId = fbUser.uid;
+    }
+
+    // 🎯 3. ID가 없으면 빈 리스트 반환하고 대기
+    if (searchId == null) {
+      print("🔎 유저 ID 대기 중...");
+      return [];
+    }
+
+    // 🎯 4. ID가 있으면 데이터를 가져옵니다.
+    print("🔎 유저 확인됨($searchId), 리스트 불러오는 중...");
+    return ref.read(walkRepositoryProvider).fetchMyWalks(searchId);
   }
 
   // my_course_list_notifier.dart 내부 수정

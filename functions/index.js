@@ -1,8 +1,11 @@
 // 마지막 배포 시도: 2026-02-06
 const { onDocumentCreated } = require("firebase-functions/v2/firestore");
 const admin = require("firebase-admin");
+const { setGlobalOptions } = require("firebase-functions/v2"); // 1. 글로벌 옵션 추가
 
 admin.initializeApp();
+
+setGlobalOptions({ region: "asia-northeast3" });
 
 exports.sendLikeNotification = onDocumentCreated("notifications/{notificationId}", async (event) => {
     const data = event.data.data();

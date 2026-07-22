@@ -28,7 +28,7 @@ plugins {
 
 android {
     namespace = "com.youngs.way_together"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     signingConfigs {
@@ -68,7 +68,7 @@ android {
         manifestPlaceholders["GOOGLE_MAPS_API_KEY"] = googleMapsApiKey
 
         minSdk = flutter.minSdkVersion   // Android 6.0 이상 (백그라운드 서비스 안정화 버전)
-        targetSdk = 35
+        targetSdk = 36
     }
 
     buildTypes {
